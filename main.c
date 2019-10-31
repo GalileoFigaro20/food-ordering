@@ -134,7 +134,7 @@ int main() {
                     break;
                 }
                 drink_choice = choice - 'a';
-                if(drink_choice > 4)
+                if(drink_choice < 4)
                 {
                     printf("Please introduce the quantity you want for the selected drink :\n>");
                     scanf("%d", &drink_choice_quantity);
@@ -187,17 +187,19 @@ int main() {
                        "    ---Name---\n"
                        "      %s\n"
                        "    ---Food Items---\n"
-                       "      %d x %s - %.2f$\n"
-                       "      %d x %s - %.2f$\n"
-                       "    ---Cutlery---\n"
-                       "         %s\n"
+                       "     %d x %s - %.2f$\n", Username, specificFoodTYPE_quantity ,specificFoodTYPE[foodTYPE_choice][specificFoodTYPETYPE_choice],
+                       specificFoodTYPE_prices[foodTYPE_choice][specificFoodTYPETYPE_choice]);
+
+                //verifying if any beverage was bought
+                if(drink_choice != 4)
+                    printf("     %d x %s - %.2f$\n", drink_choice_quantity, drinks[drink_choice],drinks_prices[drink_choice]);
+
+                printf("   ---Cutlery---\n"
+                       "       %s\n"
                        "    ---Additional information---\n"
                        "      %s\n"
                        "    ---Payment amount---\n"
-                       "               %.2f$\n",
-                       Username, specificFoodTYPE_quantity ,specificFoodTYPE[foodTYPE_choice][specificFoodTYPETYPE_choice],
-                       specificFoodTYPE_prices[foodTYPE_choice][specificFoodTYPETYPE_choice],
-                       drink_choice_quantity, drinks[drink_choice],drinks_prices[drink_choice],
+                       "         %.2f$\n",
                        cutlery[cutlery_choice], additional_info, total_amount);
 
                 printf("a) Confirm order.\n"
