@@ -195,12 +195,15 @@ int main() {
                     printf("     %d x %s - %.2f$\n", drink_choice_quantity, drinks[drink_choice],drinks_prices[drink_choice]);
 
                 printf("   ---Cutlery---\n"
-                       "       %s\n"
-                       "    ---Additional information---\n"
-                       "      %s\n"
-                       "    ---Payment amount---\n"
-                       "         %.2f$\n",
-                       cutlery[cutlery_choice], additional_info, total_amount);
+                       "       %s\n", cutlery[cutlery_choice]);
+
+                //verifying if the additional info has been introduced
+                if(strcmp(additional_info, "") != 0)
+                    printf("    ---Additional information---\n"
+                           "         %s\n", additional_info);
+
+                printf("    ---Payment amount---\n"
+                       "         %.2f$\n", total_amount);
 
                 printf("a) Confirm order.\n"
                        "b) Go back.\n");
