@@ -207,7 +207,7 @@ int main() {
                 getchar();
                 if(choice == 'b')
                 {
-                    currentState--;
+                    currentState -= 2;
                     break;
                 }
 
