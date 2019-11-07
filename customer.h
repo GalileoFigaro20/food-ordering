@@ -7,9 +7,6 @@
 
 #include "defines.h"
 
-///Variables
-char username[40], password[20];
-
 ///Functions
 void inputCostumerData(char username[MAX_USERNAME], char password[MAX_USERNAME]);
 

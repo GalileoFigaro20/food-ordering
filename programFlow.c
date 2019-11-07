@@ -7,7 +7,7 @@
 #include <string.h>
 #include <stdbool.h>
 
-void getIndex(int choice, int noOfProducts, int *currentState, int *indexChoice)
+void getChoiceIndex(int choice, int noOfProducts, int *currentState, int *indexChoice)
 {
     choice = getchar();
     ///consume new line
@@ -30,11 +30,8 @@ void addInfo(int *currentState, char* additionalInfo)
 }
 
 
-void displayOrder(char username[MAX_USERNAME] , char chosenFood[MAX_NAME], int drinkChoice, double chosenFoodPrice, char drink[MAX_NAME], double drinkPrice,
-                  char cutleryOption[MAX_NAME], char additionalInfo[MAX_ADD_INFO], double totalAmount)
+void displayFoodPlusDrinks(char username[MAX_USERNAME] , char chosenFood[MAX_NAME], int drinkChoice, double chosenFoodPrice, char drink[MAX_NAME], double drinkPrice)
 {
-    totalAmount = 0;
-    totalAmount += chosenFoodPrice + drinkPrice;
     printf("    This is your order : \n"
            "    ---Name---\n"
            "      %s\n"
@@ -44,17 +41,24 @@ void displayOrder(char username[MAX_USERNAME] , char chosenFood[MAX_NAME], int d
     //verifying if any beverage was bought
     if(drinkChoice != 4)
         printf("      %s - %.2f$\n", drink, drinkPrice);
+}
 
+void displayAdditionalOptions(char cutleryOption[MAX_NAME], char additionalInfo[MAX_ADD_INFO])
+{
     printf("    ---Cutlery---\n"
            "      %s\n", cutleryOption);
 
     if(strcmp(additionalInfo, "") != 0)
         printf("    ---Additional information---\n"
                "      %s\n", additionalInfo);
+}
 
+void displayTotalAmount(double totalAmount, double chosenFoodPrice, double drinkPrice)
+{
+    totalAmount = 0;
+    totalAmount += chosenFoodPrice + drinkPrice;
     printf("    ---Payment amount---\n"
            "      %.2f$\n", totalAmount);
-
     printf("a) Confirm order.\n"
            "b) Go back.\n");
 }
