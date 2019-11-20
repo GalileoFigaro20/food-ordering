@@ -1,8 +1,9 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include "customer.h"
-#include "products.h"
-#include "programFlow.h"
+#include "displayOptions.h"
+#include "getOrder.h"
+#include "displayOrder.h"
 
 int main() {
     char username[40], password[20], food[][30] = {"Pizza", "Pasta", "Salad"};
@@ -57,8 +58,8 @@ int main() {
             }
             case 6 :
             {
-                displayFoodPlusDrinks(username, specificFood[foodChoice][specificFoodChoice], drinkChoice, specificFoodPrices[foodChoice][specificFoodChoice],
-                             drinks[drinkChoice], drinksPrices[drinkChoice]);
+                displayFood(username, specificFood[foodChoice][specificFoodChoice],specificFoodPrices[foodChoice][specificFoodChoice]);
+                displayDrinks(drinkChoice, drinks[drinkChoice], drinksPrices[drinkChoice]);
                 displayAdditionalOptions(cutlery[cutlerychoice], additionalInfo);
                 displayTotalAmount(totalAmount, specificFoodPrices[foodChoice][specificFoodChoice], drinksPrices[drinkChoice]);
                 getFinalChoice(choice, username, &currentState, &finishedOrder);
