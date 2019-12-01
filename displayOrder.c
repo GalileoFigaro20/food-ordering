@@ -6,7 +6,7 @@
 #include "defines.h"
 #include <string.h>
 
-void displayFood(char username[MAX_USERNAME] , char chosenFood[MAX_NAME], double chosenFoodPrice)
+void displayFood(char username[MAX_USERNAME] , char chosenFood[MAX_FOOD_NAME], double chosenFoodPrice)
 {
     printf("    This is your order : \n"
            "    ---Name---\n"
@@ -15,14 +15,14 @@ void displayFood(char username[MAX_USERNAME] , char chosenFood[MAX_NAME], double
            "      %s - %.2f$\n", username, chosenFood, chosenFoodPrice);
 }
 
-void displayDrinks(int drinkChoice, char drink[MAX_NAME], double drinkPrice)
+void displayDrinks(int drinkChoice, char drink[MAX_FOOD_NAME], double drinkPrice)
 {
     //verifying if any beverage was bought
     if(drinkChoice != 4)
         printf("      %s - %.2f$\n", drink, drinkPrice);
 }
 
-void displayAdditionalOptions(char cutleryOption[MAX_NAME], char additionalInfo[MAX_ADD_INFO])
+void displayAdditionalOptions(char cutleryOption[MAX_FOOD_NAME], char additionalInfo[MAX_ADD_INFO])
 {
     printf("    ---Cutlery---\n"
            "      %s\n", cutleryOption);

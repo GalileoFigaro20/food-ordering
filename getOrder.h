@@ -9,5 +9,6 @@
 void getChoiceIndex(int choice, int noOfProducts, int *currentState, int *indexChoice);
 void addInfo(int *currentState, char* additionalInfo);
 void getFinalChoice(int choice, char username[MAX_USERNAME], int *currentState, bool *finishedOrder);
+void freeMemory(char **food, char ***specificFood, double **specificFoodPrices, char **drinks, double *drinksPrices, int noOfFood, int *noOfSpecificFood);
 
 #endif //FOOD_ORDERING_GETORDER_H

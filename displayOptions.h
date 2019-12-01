@@ -7,7 +7,7 @@
 #include "defines.h"
 
 ///Functions
-void displayOptions(char food[][MAX_NAME], int noOfFood);
-void displaySpecificOptions(int noOfProducts, char product[][MAX_NAME], double prices[]);
+void displayOptions(char **food, int noOfFood);
+void displaySpecificOptions(int noOfProducts, char **product, double prices[]);
 
 #endif //FOOD_ORDERING_DISPLAYOPTIONS_H
