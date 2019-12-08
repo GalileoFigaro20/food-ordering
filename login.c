@@ -10,21 +10,34 @@
 
 #include "login.h"
 
-void readUsersFromFile(char line[MAX_LINE], FILE* database, User* v, int *noOfUsers)
+void readUsersFromFile(char line[MAX_LINE], FILE* database, User* v, int key)
 {
+    int index = 0;
     while(fgets(line, MAX_LINE, database))
     {
-        char* temp = strtok(line, " ");
-        strcpy(v[*noOfUsers].username, temp);
+        char* temp = strtok(line, "-");
+        strcpy(v[index].username, temp);
         temp = strtok(NULL, " ");
-        strcpy(v[*noOfUsers].password, temp);
-        int j = 0;
-        while(temp[j] != '\n' && temp[j] != '\0')
+        if(strcmp(temp, "admin") != 0)
         {
-            j++;
+            char decypher[255];
+            strcpy(decypher, temp);
+            int j = 0;
+            while(temp[j] != '\n' && temp[j] != '\0')
+            {
+                j++;
+            }
+            decypher[j] = '\0';
+            for(unsigned int i = 0; i < strlen(decypher); i++)
+            {
+                decypher[i] = decypher[i] - key;
+            }
+            strcpy(v[index].password, decypher);
+        }else
+        {
+            strcpy(v[index].password, "admin");
         }
-        v[*noOfUsers].password[j] = '\0';
-        (*noOfUsers)++;
+        index++;
     }
 }
 
@@ -170,6 +183,41 @@ void getPassword(char password[MAX_USERNAME], int* loginChoice)
     (*loginChoice)--;
 }
 
+int getNoOfUsers(FILE* database)
+{
+    int n;
+    fscanf(database, "%d", &n);
+    fgetc(database);
+    return n;
+}
+
+int getKey(FILE* database)
+{
+    int key;
+    fscanf(database, "%d", &key);
+    fgetc(database);
+    return key;
+}
+
+void writeUsers(User* v, FILE* database, int noOfUsers, int key)
+{
+    for(int i = 0; i < noOfUsers; i++)
+    {
+        char cypher[255];
+        for(unsigned int j = 0; j < strlen(v[i].password); j++)
+        {
+            cypher[j] = v[i].password[j] + key;
+        }
+        cypher[strlen(v[i].password)] = '\0';
+        fprintf(database, "\n%s-%s", v[i].username, cypher);
+    }
+}
+
+void  writeKey_writeNoOfUsers(int key, int noOfUsers, FILE* database)
+{
+    fprintf(database, "%d\n%d", key, noOfUsers);
+}
+
 void Login(char username[MAX_USERNAME], char password[MAX_USERNAME], int *noOfUsers, User* v)
 {
     int loginChoice = 0, incrementingChoice = 0;
@@ -228,36 +276,25 @@ void Login(char username[MAX_USERNAME], char password[MAX_USERNAME], int *noOfUs
     }
 }
 
-void writeUsers(User* v, FILE *database, int noOfUsers)
+void loginProcess(char username[MAX_USERNAME], char password[MAX_USERNAME], User* v)
 {
-    for(int i = 0; i < noOfUsers; i++)
-    {
-        fprintf(database, "%s %s\n", v[i].username, v[i].password);
-    }
-}
-
-void loginProcess(char username[MAX_USERNAME], char password[MAX_USERNAME])
-{
-    int noOfUsers = 0;
-    char line[MAX_USERNAME];
-    User* v = (User*)malloc(MAX_USERS* sizeof(User));
-
     FILE* database;
     database = fopen("E:\\UTCN- CTI- 2019\\Computer Programming\\Laboratory Projects\\food-ordering\\database.txt", "r");
     if(database == NULL)
     {
         printf("Database not found!\n");
     }
-    readUsersFromFile(line, database,v , &noOfUsers);
+
+    char line[MAX_USERNAME];
+    int key = getKey(database), noOfUsers = getNoOfUsers(database);
+    readUsersFromFile(line, database, v, key);
+
     fclose(database);
+    database = fopen("E:\\UTCN- CTI- 2019\\Computer Programming\\Laboratory Projects\\food-ordering\\database.txt", "w");
 
     Login(username, password, &noOfUsers, v);
 
-    database = fopen("E:\\UTCN- CTI- 2019\\Computer Programming\\Laboratory Projects\\food-ordering\\database.txt", "w");
-    if(database == NULL)
-    {
-        printf("no database found!\n");
-    }
-    writeUsers(v, database, noOfUsers);
+    writeKey_writeNoOfUsers(key, noOfUsers, database);
+    writeUsers(v, database, noOfUsers, key);
     fclose(database);
 }

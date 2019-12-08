@@ -36,13 +36,15 @@ int main(){
 
     ///reading & allocating drinks
     noOfDrinks = parseNumberOfProduct(foundFile, fin);
-    double *drinksPrices = (double*)malloc(noOfDrinks * sizeof(double));
     char *p = NULL;
+    double *drinksPrices = (double*)malloc(noOfDrinks * sizeof(double));
     char **drinks = (char**)malloc(noOfDrinks * sizeof(char*));
     parseLine(foundFile, fin, line);
     parseData(line, drinks, drinksPrices, "(,)", p);
 
     fclose(fin);
+
+    User* v = (User*)malloc(MAX_USERS* sizeof(User));
 
     printf("Welcome to Food Thingies!\n");
     while(finishedOrder == false)
@@ -51,7 +53,7 @@ int main(){
         {
             case 0 :
             {
-                loginProcess(username, password);
+                loginProcess(username, password, v);
                 currentState++;
                 break;
             }
@@ -98,5 +100,5 @@ int main(){
         }
     }
 
-    freeMemory(food, specificFood, specificFoodPrices, drinks, drinksPrices, noOfFood, noOfSpecificFood);
+    freeMemory(food, specificFood, specificFoodPrices, drinks, drinksPrices, noOfFood, noOfSpecificFood, noOfDrinks);
 }

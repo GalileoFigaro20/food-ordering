@@ -45,7 +45,7 @@ void getFinalChoice(int choice, char username[MAX_USERNAME], int *currentState, 
     }
 }
 
-void freeMemory(char **food, char ***specificFood, double **specificFoodPrices, char **drinks, double *drinksPrices, int noOfFood, int *noOfSpecificFood)
+void freeMemory(char **food, char ***specificFood, double **specificFoodPrices, char **drinks, double *drinksPrices, int noOfFood, int *noOfSpecificFood, int noOfDrinks)
 {
     for(int i = 0 ; i < noOfFood; i++)
     {
@@ -56,6 +56,11 @@ void freeMemory(char **food, char ***specificFood, double **specificFoodPrices, 
         free(specificFoodPrices[i]);
         free(food[i]);
         free(specificFood[i]);
+    }
+
+    for(int i = 0; i < noOfDrinks; i++)
+    {
+        free(drinks[i]);
     }
     free(specificFood);
     free(noOfSpecificFood);

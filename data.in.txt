@@ -1,7 +1,7 @@
 4
 Pizza 4: (Pizza Margherita - 19.00) (Pizza Diavola - 21.00) (Pizza Quattro Staggione - 22.00) (Pizza Carbonara - 20.00)
 Pasta 3: (Bolognesse - 23.00) (Con Rucola - 21.00) (al Tonno - 21.00)
-Soup 2: (Chicken Soup - 10.00) (Vegetables Soup - 7.00)
-Fish 3: (Cooked Salmon - 27.00) (Fresh Danube Fish - 23.00) (Hamsii - 8.00)
-7
-(Coca-cola - 5), (Fanta - 5), (Sprite - 5), (Lipton - 5), (Fuze-Tea - 5), (Orange Pfanner - 5), (Water - 5)
+Fish 2: (Salmon - 19.00) (Hamsii - 7.00)
+Soup 3: (Chicken Soup - 12.00) (Vegetables Soup - 10.00) (Bean Soup - 11.00)
+6
+(Coca-cola - 5), (Fanta - 5), (Sprite - 5), (Lipton - 5), (Water - 3), (Beer - 4)
