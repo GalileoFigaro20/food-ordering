@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include "defines.h"
 
-void displayOptions(char food[][MAX_NAME], int noOfFood)
+void displayOptions(char **food, int noOfFood)
 {
     for(int i = 0; i < noOfFood; i++)
     {
@@ -15,7 +15,7 @@ void displayOptions(char food[][MAX_NAME], int noOfFood)
     printf("%c) Go back\n>", 'a' + noOfFood);
 }
 
-void displaySpecificOptions(int noOfProducts, char product[][MAX_NAME], double prices[])
+void displaySpecificOptions(int noOfProducts, char **product, double prices[])
 {
     for(int i = 0; i < noOfProducts; i++)
     {

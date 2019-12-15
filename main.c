@@ -1,18 +1,51 @@
 #include <stdio.h>
 #include <stdbool.h>
+#include <stdlib.h>
 #include "customer.h"
-#include "products.h"
-#include "programFlow.h"
+#include "displayOptions.h"
+#include "getOrder.h"
+#include "displayOrder.h"
+#include "parseData.h"
+#include "login.h"
 
-int main() {
-    char username[40], password[20], food[][30] = {"Pizza", "Pasta", "Salad"};
-    int noOfFood = 3, noOfDrinks = 5, noOfSpecificFood[] = {3, 2, 4};
-    char specificFood[3][4][MAX_NAME] = {{"Pizza Carbonara", "Pizza Diavola", "Pizza Margherita"},{"Chicken Alfredo", "Mac&Cheese"},
-                                         {"Tuna Salad", "Chicken Salad", "Greek Salad", "Cobb"}};
-    char drinks[][MAX_NAME] = {"Coca-Cola", "Fanta", "Lipton", "Water", "No thanks"}, cutlery[][MAX_NAME] = {"yes", "no"}, additionalInfo[MAX_ADD_INFO];
-    double totalAmount = 0, drinksPrices[MAX_PRICE] = {5, 5, 5, 4, 0}, specificFoodPrices[3][4] = {{21, 23, 19, 0},{23, 21, 0, 0},{23, 22, 19, 21}};
-    bool finishedOrder = false;
-    int currentState = 0, choice, foodChoice, specificFoodChoice, drinkChoice, cutlerychoice;
+int main(){
+    ///Variables
+    char username[40], password[20], **cutlery = (char**)malloc(2* sizeof(char*)), additionalInfo[MAX_ADD_INFO], line[255];
+    cutlery[0] = "yes"; cutlery[1] = "no";
+    double totalAmount = 0;
+    bool finishedOrder = false, foundFile = true;
+    int currentState = 0, choice = 0, foodChoice = 0, specificFoodChoice = 0;
+    int drinkChoice = 0, cutleryChoice = 0, noOfFood = 0, noOfDrinks = 0;
+
+    ///Open files
+    FILE *fin;
+    fin = fopen("E:\\UTCN- CTI- 2019\\Computer Programming\\Laboratory Projects\\food-ordering\\data.in.txt", "r");
+    if(fin == NULL)
+    {
+        foundFile = false;
+        printf(LOAD_DATA);
+    }
+
+    ///reading & allocating food
+    char **food = (char**)malloc(noOfFood* sizeof(char*));
+    char ***specificFood = (char***)malloc(noOfFood * sizeof(char**));
+    double **specificFoodPrices = (double**)malloc(noOfFood * sizeof(double*));
+    int *noOfSpecificFood = (int*)malloc(noOfFood * sizeof(int));
+    noOfFood = parseNumberOfProduct(foundFile, fin);
+    parseAllSpecificData(noOfFood, foundFile, fin, line, noOfSpecificFood, food, specificFood, specificFoodPrices);
+
+    ///reading & allocating drinks
+    noOfDrinks = parseNumberOfProduct(foundFile, fin);
+    char *p = NULL;
+    double *drinksPrices = (double*)malloc(noOfDrinks * sizeof(double));
+    char **drinks = (char**)malloc(noOfDrinks * sizeof(char*));
+    parseLine(foundFile, fin, line);
+    parseData(line, drinks, drinksPrices, "(,)", p);
+
+    fclose(fin);
+
+    User* v = (User*)malloc(MAX_USERS* sizeof(User));
+
     printf("Welcome to Food Thingies!\n");
     while(finishedOrder == false)
     {
@@ -20,7 +53,7 @@ int main() {
         {
             case 0 :
             {
-                inputCostumerData(username, password);
+                loginProcess(username, password, v);
                 currentState++;
                 break;
             }
@@ -47,7 +80,7 @@ int main() {
             {
                 printf("Do you want cutlery? :\n");
                 displayOptions(cutlery, 2);
-                getChoiceIndex(choice, 2, &currentState, &cutlerychoice);
+                getChoiceIndex(choice, 2, &currentState, &cutleryChoice);
                 break;
             }
             case 5 :
@@ -57,13 +90,15 @@ int main() {
             }
             case 6 :
             {
-                displayFoodPlusDrinks(username, specificFood[foodChoice][specificFoodChoice], drinkChoice, specificFoodPrices[foodChoice][specificFoodChoice],
-                             drinks[drinkChoice], drinksPrices[drinkChoice]);
-                displayAdditionalOptions(cutlery[cutlerychoice], additionalInfo);
+                displayFood(username, specificFood[foodChoice][specificFoodChoice],specificFoodPrices[foodChoice][specificFoodChoice]);
+                displayDrinks(drinkChoice, drinks[drinkChoice], drinksPrices[drinkChoice]);
+                displayAdditionalOptions(cutlery[cutleryChoice], additionalInfo);
                 displayTotalAmount(totalAmount, specificFoodPrices[foodChoice][specificFoodChoice], drinksPrices[drinkChoice]);
                 getFinalChoice(choice, username, &currentState, &finishedOrder);
                 break;
             }
         }
     }
+
+    freeMemory(food, specificFood, specificFoodPrices, drinks, drinksPrices, noOfFood, noOfSpecificFood, noOfDrinks);
 }
