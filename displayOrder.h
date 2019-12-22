@@ -6,9 +6,9 @@
 #define FOOD_ORDERING_DISPLAYORDER_H
 #include "defines.h"
 
-void displayFood(char username[MAX_USERNAME] , char chosenFood[MAX_FOOD_NAME], double chosenFoodPrice);
-void displayDrinks(int drinkChoice, char drink[MAX_FOOD_NAME], double drinkPrice);
+void displayFood(char username[MAX_USERNAME], product *food);
+void displayDrinks(int drinkChoice, product *drink);
 void displayAdditionalOptions(char cutleryOption[MAX_FOOD_NAME], char additionalInfo[MAX_ADD_INFO]);
-void displayTotalAmount(double totalAmount, double chosenFoodPrice, double drinkPrice);
+void displayTotalAmount(double totalAmount, product *food, product *drink);
 
 #endif //FOOD_ORDERING_DISPLAYORDER_H

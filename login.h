@@ -5,7 +5,9 @@
 #ifndef FOOD_ORDERING_LOGIN_H
 #define FOOD_ORDERING_LOGIN_H
 
-typedef struct{
+// The user struct is highly important for the login process and extracting all the functions that contains it as a parameter seemed to me very useless and
+// also very hard, so I decided to let it here. Moreover, this struct was already created before the assignment.
+typedef struct _User{
     char username[255];
     char password[255];
 }User;

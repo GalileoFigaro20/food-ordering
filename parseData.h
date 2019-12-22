@@ -7,17 +7,15 @@
 
 #include <stdio.h>
 #include "defines.h"
+#include "product.h"
+#include "food.h"
 #include <stdbool.h>
 
-void parseProductName(char **product, char *p, int index, int *stringIndex);
-void parseProductPrice(double* productPrices, char* p, int* index, int* stringIndex);
-void parseData(char line[MAX_LINE], char** productName, double* productPrices, char token[MAX_LINE], char *p);
 int parseNumberOfProduct(bool foundFile, FILE* fin);
 void parseLine(bool foundFile, FILE* fin, char line[MAX_LINE]);
 void computeNumberOfSpecificFood(int* noOfSpecificFood, int i, char line[MAX_LINE]);
-void allocateFoodMemory(char** food, int i, char*** specificFood, int* noOfSpecificFood, double** specificFoodPrices);
-void parseFoodName(char** food, int i, char* p);
-void parseAllSpecificData(int noOfFood, bool foundFile, FILE* fin, char *line, int* noOfSpecificFood, char** food, char*** specificFood, double** specificFoodPrices);
+void parseFoodName(food *f, int i, char* p);
+void parseAllSpecificData(int noOfFood, bool foundFile, FILE* fin, char *line, int* noOfSpecificFood, food *foods);
 
 
 #endif //FOOD_ORDERING_PARSEDATA_H

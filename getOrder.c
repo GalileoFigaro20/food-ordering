@@ -5,6 +5,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "defines.h"
+#include "product.h"
+#include "food.h"
 #include <stdbool.h>
 
 void getChoiceIndex(int choice, int noOfProducts, int *currentState, int *indexChoice)
@@ -45,29 +47,26 @@ void getFinalChoice(int choice, char username[MAX_USERNAME], int *currentState, 
     }
 }
 
-void freeMemory(char **food, char ***specificFood, double **specificFoodPrices, char **drinks, double *drinksPrices, int noOfFood, int *noOfSpecificFood, int noOfDrinks)
+void freeMemory(food *foods, product *drinks, int noOfFood, int *noOfSpecificFood, int noOfDrinks)
 {
     for(int i = 0 ; i < noOfFood; i++)
     {
         for(int j = 0; j < noOfSpecificFood[i]; j++)
         {
-            free(specificFood[i][j]);
+            free(foods[i].products[j].name);
         }
-        free(specificFoodPrices[i]);
-        free(food[i]);
-        free(specificFood[i]);
+        free(foods[i].products);
+        free(foods[i].name);
     }
 
     for(int i = 0; i < noOfDrinks; i++)
     {
-        free(drinks[i]);
+        free(drinks[i].name);
     }
-    free(specificFood);
+    free(foods);
     free(noOfSpecificFood);
-    free(specificFoodPrices);
-    free(food);
+    free(foods);
     free(drinks);
-    free(drinksPrices);
 }
 
 
