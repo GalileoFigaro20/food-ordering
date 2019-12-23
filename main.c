@@ -90,7 +90,7 @@ int main(){
             }
             case DISPLAY_AND_SIGN :
             {
-                displayFood(username, &foods->products[foodChoice]);
+                displayFood(username, &foods[foodChoice].products[specificFoodChoice]);
                 displayDrinks(drinkChoice, &drinks[drinkChoice]);
                 displayAdditionalOptions(cutlery[cutleryChoice], additionalInfo);
                 displayTotalAmount(totalAmount, &foods->products[foodChoice], &drinks[drinkChoice]);
