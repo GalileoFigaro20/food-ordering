@@ -1,12 +1,12 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <stdlib.h>
-#include "customer.h"
 #include "displayOptions.h"
 #include "getOrder.h"
 #include "displayOrder.h"
 #include "parseData.h"
 #include "login.h"
+#include "product.h"
 
 int main(){
     ///Variables
@@ -27,78 +27,78 @@ int main(){
     }
 
     ///reading & allocating food
-    char **food = (char**)malloc(noOfFood* sizeof(char*));
-    char ***specificFood = (char***)malloc(noOfFood * sizeof(char**));
-    double **specificFoodPrices = (double**)malloc(noOfFood * sizeof(double*));
-    int *noOfSpecificFood = (int*)malloc(noOfFood * sizeof(int));
     noOfFood = parseNumberOfProduct(foundFile, fin);
-    parseAllSpecificData(noOfFood, foundFile, fin, line, noOfSpecificFood, food, specificFood, specificFoodPrices);
+    food *foods = (food*)malloc(noOfFood* sizeof(food));
+    int *noOfSpecificFood = (int*)malloc(noOfFood * sizeof(int));
+    parseAllSpecificData(noOfFood, foundFile, fin, line, noOfSpecificFood, foods);
 
     ///reading & allocating drinks
     noOfDrinks = parseNumberOfProduct(foundFile, fin);
     char *p = NULL;
-    double *drinksPrices = (double*)malloc(noOfDrinks * sizeof(double));
-    char **drinks = (char**)malloc(noOfDrinks * sizeof(char*));
+    product *drinks = (product*)malloc(noOfDrinks * sizeof(product));
     parseLine(foundFile, fin, line);
-    parseData(line, drinks, drinksPrices, "(,)", p);
+    parseData(line, drinks, "(,)", p);
 
     fclose(fin);
 
     User* v = (User*)malloc(MAX_USERS* sizeof(User));
 
+    enum State{
+        LOGIN_PROCESS, CHOOSE_FOOD, CHOOSE_SPECIFIC_FOOD, CHOOSE_DRINK, CHOOSE_CUTLERY, ADDITIONAL_INFO, DISPLAY_AND_SIGN
+    };
     printf("Welcome to Food Thingies!\n");
     while(finishedOrder == false)
     {
         switch(currentState)
         {
-            case 0 :
+            case LOGIN_PROCESS :
             {
                 loginProcess(username, password, v);
                 currentState++;
                 break;
             }
-            case 1 :
+            case CHOOSE_FOOD :
             {
                 printf("Please choose the food you feel like eating today :\n");
-                displayOptions(food, noOfFood);
+                displayOptions(foods, noOfFood);
                 getChoiceIndex(choice, noOfFood, &currentState, &foodChoice);
                 break;
             }
-            case 2 :
+            case CHOOSE_SPECIFIC_FOOD :
             {
-                displaySpecificOptions(noOfSpecificFood[foodChoice], specificFood[foodChoice], specificFoodPrices[foodChoice]);
+                displaySpecificOptions(noOfSpecificFood[foodChoice], foods[foodChoice].products);
                 getChoiceIndex(choice, noOfSpecificFood[foodChoice], &currentState, &specificFoodChoice);
                 break;
             }
-            case 3 :
+            case CHOOSE_DRINK :
             {
-                displaySpecificOptions(noOfDrinks, drinks, drinksPrices);
+                displaySpecificOptions(noOfDrinks, drinks);
                 getChoiceIndex(choice, noOfDrinks, &currentState, &drinkChoice);
                 break;
             }
-            case 4 :
+            case CHOOSE_CUTLERY :
             {
                 printf("Do you want cutlery? :\n");
-                displayOptions(cutlery, 2);
+                displayCutleryOptions(cutlery, 2);
                 getChoiceIndex(choice, 2, &currentState, &cutleryChoice);
                 break;
             }
-            case 5 :
+            case ADDITIONAL_INFO :
             {
                 addInfo(&currentState, additionalInfo);
                 break;
             }
-            case 6 :
+            case DISPLAY_AND_SIGN :
             {
-                displayFood(username, specificFood[foodChoice][specificFoodChoice],specificFoodPrices[foodChoice][specificFoodChoice]);
-                displayDrinks(drinkChoice, drinks[drinkChoice], drinksPrices[drinkChoice]);
+                displayFood(username, &foods[foodChoice].products[specificFoodChoice]);
+                displayDrinks(drinkChoice, &drinks[drinkChoice]);
                 displayAdditionalOptions(cutlery[cutleryChoice], additionalInfo);
-                displayTotalAmount(totalAmount, specificFoodPrices[foodChoice][specificFoodChoice], drinksPrices[drinkChoice]);
+                displayTotalAmount(totalAmount, &foods->products[foodChoice], &drinks[drinkChoice]);
                 getFinalChoice(choice, username, &currentState, &finishedOrder);
                 break;
             }
         }
     }
 
-    freeMemory(food, specificFood, specificFoodPrices, drinks, drinksPrices, noOfFood, noOfSpecificFood, noOfDrinks);
+    freeMemory(foods, drinks, noOfFood, noOfSpecificFood, noOfDrinks);
 }

@@ -10,6 +10,23 @@
 
 #include "login.h"
 
+void decryptPass(User*v, int key, int index, char temp[])
+{
+    char string[255];
+    strcpy(string, temp);
+    int j = 0;
+    while(temp[j] != '\n' && temp[j] != '\0')
+    {
+        j++;
+    }
+    string[j] = '\0';
+    for(unsigned int i = 0; i < strlen(string); i++)
+    {
+        string[i] = string[i] - key;
+    }
+    strcpy(v[index].password, string);
+}
+
 void readUsersFromFile(char line[MAX_LINE], FILE* database, User* v, int key)
 {
     int index = 0;
@@ -17,22 +34,10 @@ void readUsersFromFile(char line[MAX_LINE], FILE* database, User* v, int key)
     {
         char* temp = strtok(line, "-");
         strcpy(v[index].username, temp);
-        temp = strtok(NULL, " ");
+        temp = strtok(NULL, "-");
         if(strcmp(temp, "admin") != 0)
         {
-            char decypher[255];
-            strcpy(decypher, temp);
-            int j = 0;
-            while(temp[j] != '\n' && temp[j] != '\0')
-            {
-                j++;
-            }
-            decypher[j] = '\0';
-            for(unsigned int i = 0; i < strlen(decypher); i++)
-            {
-                decypher[i] = decypher[i] - key;
-            }
-            strcpy(v[index].password, decypher);
+            decryptPass(v, key, index, temp);
         }else
         {
             strcpy(v[index].password, "admin");
@@ -199,16 +204,21 @@ int getKey(FILE* database)
     return key;
 }
 
+void cryptPass(User* v, int i, int key, char cypher[])
+{
+    for(unsigned int j = 0; j < strlen(v[i].password); j++)
+    {
+        cypher[j] = v[i].password[j] + key;
+    }
+    cypher[strlen(v[i].password)] = '\0';
+}
+
 void writeUsers(User* v, FILE* database, int noOfUsers, int key)
 {
     for(int i = 0; i < noOfUsers; i++)
     {
         char cypher[255];
-        for(unsigned int j = 0; j < strlen(v[i].password); j++)
-        {
-            cypher[j] = v[i].password[j] + key;
-        }
-        cypher[strlen(v[i].password)] = '\0';
+        cryptPass(v, i, key, cypher);
         fprintf(database, "\n%s-%s", v[i].username, cypher);
     }
 }
@@ -218,6 +228,10 @@ void  writeKey_writeNoOfUsers(int key, int noOfUsers, FILE* database)
     fprintf(database, "%d\n%d", key, noOfUsers);
 }
 
+enum STATE{
+    CHOOSE_SIGN_OPTION, SIGN_PARSING, SIGN_in, SIGN_up, GET_PASSWORD
+};
+
 void Login(char username[MAX_USERNAME], char password[MAX_USERNAME], int *noOfUsers, User* v)
 {
     int loginChoice = 0, incrementingChoice = 0;
@@ -226,20 +240,20 @@ void Login(char username[MAX_USERNAME], char password[MAX_USERNAME], int *noOfUs
     {
         switch(loginChoice)
         {
-            case 0 :
+            case CHOOSE_SIGN_OPTION :
             {
                 signingOption(&incrementingChoice, &loginChoice);
                 break;
             }
 
-            case 1 :
+            case SIGN_PARSING :
             {
                 signingParsing(&incrementingChoice, &loginChoice, username, password);
                 break;
             }
 
                 ///SIGN IN
-            case 2 :
+            case SIGN_in :
             {
                 bool userFound = false;
                 int userIndex = 0;
@@ -249,7 +263,7 @@ void Login(char username[MAX_USERNAME], char password[MAX_USERNAME], int *noOfUs
             }
 
                 ///SIGN UP
-            case 3 :
+            case SIGN_up :
             {
                 bool hasError = false;
                 verifyUsername(v, username, &loginChoice, *noOfUsers);
@@ -262,7 +276,7 @@ void Login(char username[MAX_USERNAME], char password[MAX_USERNAME], int *noOfUs
                 break;
             }
 
-            case 4 :
+            case GET_PASSWORD :
             {
                 getPassword(password, &loginChoice);
                 break;

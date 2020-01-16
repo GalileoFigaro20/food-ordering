@@ -6,7 +6,7 @@
 #define FOOD_ORDERING_DEFINES_H
 
 #define MAX_FOOD_NAME 30
-#define MAX_USERNAME 20
+#define MAX_USERNAME 50
 #define MAX_ADD_INFO 50
 #define MAX_DRINK_NAME 20
 #define MAX_LINE 255
